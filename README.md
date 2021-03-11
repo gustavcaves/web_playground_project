@@ -4,10 +4,10 @@ In this repositoy I will be getting the documentation of the proyect web playgor
 
 # Index
 
-1. [Como subir este repositorio](#Como-subir-este-repo)
-2. [Contraseña Login](#Contraseña-Login)
+1. [How to upload this repository](#How-to-upload-this-repository)
+2. [Password Login](#Password-Login)
 3. [Link de Post - Blog Notion](#Link-de-Post---Blog-Notion)
-4. [Comentarios](#Comentarios)
+4. [Comments](#Comments)
 
 # How to upload this repository
 
@@ -19,7 +19,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
   - git add .
   - git commit -m "first commit"
   - git branch -M main
-  - git remote add origin https://github.com/gustavcaves/examen-tema1-4-django
+  - git remote add origin https://github.com/gustavcaves/web_playground_project.git
   - git push -u origin main
 - **Luego para seguir actualizando:**
 
@@ -30,13 +30,13 @@ In this repositoy I will be getting the documentation of the proyect web playgor
   - git status
   - **git push -u origin main**
 
-# Contraseña Login
+# Password Login
 
 admin | 1234
 
 # Link de Post
 
-# Comentarios
+# Comments
 
 ### wednesday, 10 march 2021 23:13
 
