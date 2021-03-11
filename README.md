@@ -30,6 +30,13 @@ In this repositoy I will be getting the documentation of the proyect web playgor
   - git status
   - **git push -u origin main**
 
+
+# Create Virtual Eviroment With Conda
+
+- conda create -n py392_webplayground python=3.9.2
+- activate : $ conda activate py392_webplayground
+- deactivate : $ conda deactivate
+
 # Password Login
 
 admin | 1234
