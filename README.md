@@ -30,7 +30,6 @@ In this repositoy I will be getting the documentation of the proyect web playgor
   - git status
   - **git push -u origin main**
 
-
 # Create Virtual Eviroment With Conda
 
 - conda create -n py392_webplayground python=3.9.2
@@ -42,6 +41,10 @@ In this repositoy I will be getting the documentation of the proyect web playgor
 admin | 1234
 
 # Link de Post
+
+# Requirements
+
+pip freeze > requirements.txt
 
 # Comments
 
