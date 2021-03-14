@@ -14,7 +14,7 @@ class HomePageView(TemplateView):
     # def get(self, request: http.HttpRequest, *args: Any, **kwargs: Any) -> http.HttpResponse:
     #     return super().get(request, *args, **kwargs)
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {'title':"My Supper Web PlayGround"})
 
 class SamplePageView(TemplateView):
