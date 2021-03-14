@@ -8,6 +8,8 @@ from django.views.generic.edit import CreateView
 
 from django.urls import reverse, reverse_lazy
 
+from django.views.generic.edit import UpdateView
+
 # Create your views here.
 # def pages(request):
 #     pages = get_list_or_404(Page)
@@ -37,3 +39,11 @@ class PageCreate(CreateView):
     # def get_success_url(self): # THIS IS A WAY TO DO IT | THIS REDIRECT THE PAGE
     #     return reverse('pages:pages')
     # BUT OVERWRITE THE METHOD get IS TEDIOUS IT NOT HAVE SENSE SO USE reverse_laze import it
+
+class PageUpdate(UpdateView):
+    model = Page
+    fields = ['title', 'content', 'order']
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self):
+        return reverse_lazy('pages:update', args=[self.object.id]) + '?ok'
