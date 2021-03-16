@@ -18,6 +18,8 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    7. [Forms for Models in CBV](#Forms-for-Models-in-CBV)
    8. [Create a Id Mixing](#Create-a-Id-Mixing)
    9. [Using ID Decorators](#Using-ID-Decorators)
+   10. [8th App "Registration" Start Session](#8th-App-"Registration"-Start-Session)
+   11. [Closing the session](#Closing-the-session)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -870,6 +872,45 @@ LOGIN_REDIRECT_URL = 'home'
 
 Try again and this work, it redirect the page.
 
+
+# Closing the session
+
+[Index](#Index)
+
+In core/templates/core/base.html
+
+```
+            {% comment %} <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/">
+                  {% if request.user.is_staff %}Admin{% else %}Acceder{% endif %}
+                </a>
+              </li>
+            </ul> {% endcomment %}
+            <ul class="navbar-nav">
+              {% if not request.user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Acceder</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Salir</a>
+                </li>
+               {% endif %}
+            </ul>
+```
+
+In settings.py
+
+```
+# Auth redirect
+LOGIN_REDIRECT_URL = 'pages:pages'
+LOGOUT_REDIRECT_URL = 'pages:pages'
+```
+
+Try login and logout, see the result.
+
+Has been so easy, ¿true?
 
 # Comments
 
