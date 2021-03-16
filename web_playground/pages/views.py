@@ -11,6 +11,8 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
 
+from . forms import PageForm
+
 # Create your views here.
 # def pages(request):
 #     pages = get_list_or_404(Page)
@@ -30,7 +32,8 @@ class PageDetailView(DetailView):
 
 class PageCreate(CreateView):
     model = Page
-    fields = ['title', 'content', 'order']
+    form_class = PageForm
+    # fields = ['title', 'content', 'order'] # THIS IS IN PAGEFORM SO HERE WE CAN DELETE THIS LINE
     success_url = reverse_lazy('pages:pages')
     # success_url = reversed('pages:page') | THIS IS NOT THE WAY
 
@@ -43,7 +46,8 @@ class PageCreate(CreateView):
 
 class PageUpdate(UpdateView):
     model = Page
-    fields = ['title', 'content', 'order']
+    form_class = PageForm
+    # fields = ['title', 'content', 'order'] # THIS COMMENT IS BECAUSE FORM CLASS IT HAS IT
     template_name_suffix = '_update_form'
 
     def get_success_url(self):
@@ -52,5 +56,4 @@ class PageUpdate(UpdateView):
 class PageDelete(DeleteView):
     model = Page
     success_url = reverse_lazy('pages:pages')
-
     
