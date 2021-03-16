@@ -211,7 +211,7 @@ In this links copy some text [https://www.lipsum.com/](https://www.lipsum.com/) 
 
 ## ListView and DetailView
 
-[Index
+[Index](#Index)
 
 [http://ccbv.co.uk/projects/Django/3.1/django.views.generic.list/ListView/](http://ccbv.co.uk/projects/Django/3.1/django.views.generic.list/ListView/)
 
@@ -255,7 +255,6 @@ urlpatterns = [
     path('<int:pk>/<slug:slug>/', views.PageDetailView.as_view(), name='page'),
 ]
 ```
-
 
 pages/templates/page change the name of the html pages and page for
 
@@ -685,7 +684,7 @@ class PageAdmin(admin.ModelAdmin):
         css = {
             'all': ('pages/css/custom_ckeditor.css',)
         }
-    
+  
 admin.site.register(Page, PageAdmin)
 ```
 
@@ -723,6 +722,11 @@ And for each class view we add the StaffRequiredMixin as priority
 pages/views.py
 
 ```
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
+```
+
+```
 class StaffRequiredMixin(object):
     """
     This mixing required the user is from the staff
@@ -754,6 +758,115 @@ class PageDelete(DeleteView):
 Now in the url it show us a new data that is ?next= who redirect us a the indicated page
 
 http://127.0.0.1:8000/admin/login/?next=/pages/create/
+
+## 8th App "Registration" Start Session
+
+The name will be "registration"
+
+`(py392_webplayground) C:\www_dj\web_playground\web_playground>python manage.py startapp registration`
+
+urls.py general
+
+```
+    # Path Auth
+    path('accounts/', include('django.contrib.auth.urls')),
+```
+
+Then go to:
+
+http://127.0.0.1:8000/accounts
+
+And you will see
+
+Using the URLconf defined in `web_playground.urls`, Django tried these URL patterns, in this order:
+
+1. [name='home']
+2. sample/ [name='sample']
+3. pages/
+4. admin/
+5. accounts login/ [name='login']
+6. accounts logout/ [name='logout']
+7. accounts password_change/ [name='password_change']
+8. accounts password_change/done/ [name='password_change_done']
+9. accounts password_reset/ [name='password_reset']
+10. accounts password_reset/done/ [name='password_reset_done']
+11. accounts reset/<uidb64>/<token>/ [name='password_reset_confirm']
+12. accounts reset/done/ [name='password_reset_complete']
+
+The current path, `accounts`, didn't match any of these.
+
+
+http://ccbv.co.uk/ | AUTH VIEWS
+
+Only we have to establish the templates or extend if we need do it
+
+If we go to accounts/login it show us a typical error template, so we need to create it
+
+So create a file in registrations/templates/registration called login.html with the nex code:
+
+https://gist.github.com/gustavcaves/38b56718be23000c61be51767e54b90a
+
+```
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Iniciar sesión{% endblock %}
+{% block content %}
+<style>.errorlist{color:red;}</style>
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <form action="" method="post">{% csrf_token %}
+          <h3 class="mb-4">Iniciar sesión</h3>
+          {% if form.non_field_errors %}
+            <p style="color:red">Usuario o contraseña incorrectos, prueba de nuevo.</p>
+          {% endif %}
+          <p>
+            <input type="text" name="username" autofocus maxlength="254" required
+              id="id_username" class="form-control" placeholder="Nombre de usuario"/>
+          </p>
+          <p>
+            <input type="password" name="password" required
+              id="id_password" class="form-control" placeholder="Contraseña"/>
+          </p>
+          <p><input type="submit" class="btn btn-primary btn-block" value="Acceder"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+```
+
+At this point we need to activate our app in setting.py, put at the top of the apps for give it priority.
+
+```
+# Application definition
+
+INSTALLED_APPS = [
+    'registration',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'core',
+    'pages.apps.PagesConfig',
+    'ckeditor',
+]
+```
+
+Go to your web browser and ¡wala! our login page is working on.
+
+If you try login, it give us an error, it redirect us a profile for this user, and we need to redirect to an another page, and we need defineted it in setting.py.
+
+```
+# Auth redirect
+LOGIN_REDIRECT_URL = 'home'
+```
+
+Try again and this work, it redirect the page.
 
 
 # Comments
