@@ -761,6 +761,8 @@ http://127.0.0.1:8000/admin/login/?next=/pages/create/
 
 ## 8th App "Registration" Start Session
 
+[Index](#Index)
+
 The name will be "registration"
 
 `(py392_webplayground) C:\www_dj\web_playground\web_playground>python manage.py startapp registration`
