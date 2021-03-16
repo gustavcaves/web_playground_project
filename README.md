@@ -46,6 +46,34 @@ admin | 1234
 
 pip freeze > requirements.txt
 
+# Documentation Web Playground
+
+## Create a Id Mixing
+
+As our views that we have created are publick we need to solve this problem.
+
+```
+class StaffRequiredMixin(object):
+    """
+    This mixing required the user is from the staff
+    """
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect(reverse_lazy('admin:login'))
+        return super(PageCreate, self).dispatch(request, *args, **kwargs)
+
+
+```
+
+And for each class view we add the StaffRequiredMixin as priority
+
+`class PageCreate(StaffRequiredMixin, CreateView):`
+
+`class PageUpdate(StaffRequiredMixin, UpdateView):`
+
+`class PageDelete(StaffRequiredMixin, DeleteView):`
+
+
 # Comments
 
 ### wednesday, 10 march 2021 23:13

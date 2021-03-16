@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from .models import Page
 
 from django.views.generic.list import ListView
@@ -12,6 +12,16 @@ from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
 
 from . forms import PageForm
+
+class StaffRequiredMixin(object):
+    """
+    This mixing required the user is from the staff
+    """
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect(reverse_lazy('admin:login'))
+        return super(PageCreate, self).dispatch(request, *args, **kwargs)
+
 
 # Create your views here.
 # def pages(request):
@@ -30,7 +40,7 @@ class PageDetailView(DetailView):
 
     model = Page
 
-class PageCreate(CreateView):
+class PageCreate(StaffRequiredMixin, CreateView):
     model = Page
     form_class = PageForm
     # fields = ['title', 'content', 'order'] # THIS IS IN PAGEFORM SO HERE WE CAN DELETE THIS LINE
@@ -44,7 +54,7 @@ class PageCreate(CreateView):
     #     return reverse('pages:pages')
     # BUT OVERWRITE THE METHOD get IS TEDIOUS IT NOT HAVE SENSE SO USE reverse_laze import it
 
-class PageUpdate(UpdateView):
+class PageUpdate(StaffRequiredMixin, UpdateView):
     model = Page
     form_class = PageForm
     # fields = ['title', 'content', 'order'] # THIS COMMENT IS BECAUSE FORM CLASS IT HAS IT
@@ -53,7 +63,7 @@ class PageUpdate(UpdateView):
     def get_success_url(self):
         return reverse_lazy('pages:update', args=[self.object.id]) + '?ok'
 
-class PageDelete(DeleteView):
+class PageDelete(StaffRequiredMixin, DeleteView):
     model = Page
     success_url = reverse_lazy('pages:pages')
     
