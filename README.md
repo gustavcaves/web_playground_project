@@ -654,19 +654,6 @@ class PageAdmin(admin.ModelAdmin):
 admin.site.register(Page, PageAdmin)
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Create a Id Mixing
 
 As our views that we have created are publick we need to solve this problem.
@@ -693,6 +680,42 @@ And for each class view we add the StaffRequiredMixin as priority
 `class PageDelete(StaffRequiredMixin, DeleteView):`
 
 ## Using ID Decorators
+
+pages/views.py
+
+```
+class StaffRequiredMixin(object):
+    """
+    This mixing required the user is from the staff
+    """
+    @method_decorator(staff_member_required)
+    def dispatch(self, request, *args, **kwargs):
+        #if not request.user.is_staff: # IS NOT REQUIRED WHEN WE USE THE DECORADOR
+        #    return redirect(reverse_lazy('admin:login')) # IS NOT REQUIRED WHEN WE USE THE DECORADOR
+        return super(PageCreate, self).dispatch(request, *args, **kwargs)
+```
+
+for each class view
+
+```
+@method_decorator(staff_member_required, name="dispatch")
+class PageCreate(CreateView):
+```
+
+```
+@method_decorator(staff_member_required, name="dispatch")
+class PageUpdate(UpdateView):
+```
+
+```
+@method_decorator(staff_member_required, name="dispatch")
+class PageDelete(DeleteView):
+```
+
+Now in the url it show us a new data that is ?next= who redirect us a the indicated page
+
+http://127.0.0.1:8000/admin/login/?next=/pages/create/
+
 
 # Comments
 

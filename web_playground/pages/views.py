@@ -13,13 +13,17 @@ from django.views.generic.edit import DeleteView
 
 from . forms import PageForm
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
+
 class StaffRequiredMixin(object):
     """
     This mixing required the user is from the staff
     """
+    @method_decorator(staff_member_required)
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            return redirect(reverse_lazy('admin:login'))
+        #if not request.user.is_staff: # IS NOT REQUIRED WHEN WE USE THE DECORADOR
+        #    return redirect(reverse_lazy('admin:login')) # IS NOT REQUIRED WHEN WE USE THE DECORADOR
         return super(PageCreate, self).dispatch(request, *args, **kwargs)
 
 
@@ -40,7 +44,8 @@ class PageDetailView(DetailView):
 
     model = Page
 
-class PageCreate(StaffRequiredMixin, CreateView):
+@method_decorator(staff_member_required, name="dispatch")
+class PageCreate(CreateView):
     model = Page
     form_class = PageForm
     # fields = ['title', 'content', 'order'] # THIS IS IN PAGEFORM SO HERE WE CAN DELETE THIS LINE
@@ -54,7 +59,8 @@ class PageCreate(StaffRequiredMixin, CreateView):
     #     return reverse('pages:pages')
     # BUT OVERWRITE THE METHOD get IS TEDIOUS IT NOT HAVE SENSE SO USE reverse_laze import it
 
-class PageUpdate(StaffRequiredMixin, UpdateView):
+@method_decorator(staff_member_required, name="dispatch")
+class PageUpdate(UpdateView):
     model = Page
     form_class = PageForm
     # fields = ['title', 'content', 'order'] # THIS COMMENT IS BECAUSE FORM CLASS IT HAS IT
@@ -63,7 +69,8 @@ class PageUpdate(StaffRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('pages:update', args=[self.object.id]) + '?ok'
 
-class PageDelete(StaffRequiredMixin, DeleteView):
+@method_decorator(staff_member_required, name="dispatch")
+class PageDelete(DeleteView):
     model = Page
     success_url = reverse_lazy('pages:pages')
     
