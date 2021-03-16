@@ -5,12 +5,24 @@ In this repositoy I will be getting the documentation of the proyect web playgor
 # Index
 
 1. [How to upload this repository](#How-to-upload-this-repository)
-2. [Password Login](#Password-Login)
-3. [Link de Post - Blog Notion](#Link-de-Post---Blog-Notion)
-4. [Documentation](#Documentation-Web-Playground)
-5. [Comments](#Comments)
+2. [Create Virtual Environment With Conda](#Create-Virtual-Environment-With-Conda)
+3. [Password Login](#Password-Login)
+4. [Requirements](#Requirements)
+5. [Documentation](#Documentation-Web-Playground)
+   1. [First CBV and Template View](#First-CBV-and-Template-View)
+   2. [Config App Pages](#Config-App-Pages)
+   3. [ListView and DetailView](#ListView-and-DetailView)
+   4. [CRUD Views CBV Create View](#CRUD-Views-CBV-Create-View)
+   5. [CRUD Views CBV UpdateView](#CRUD-Views-CBV-UpdateView)
+   6. [CRUD Views CBV DeleteView](#CRUD-Views-CBV-DeleteView)
+   7. [Forms for Models in CBV](#Forms-for-Models-in-CBV)
+   8. [Create a Id Mixing](#Create-a-Id-Mixing)
+   9. [Using ID Decorators](#Using-ID-Decorators)
+6. [Comments](#Comments)
 
 # How to upload this repository
+
+[Index](#Index)
 
 - Creo el repo en github normal si novedad, en blanco.
 - Creo el README.md con la estructura de documentacion como puedes ver.
@@ -33,23 +45,35 @@ In this repositoy I will be getting the documentation of the proyect web playgor
 
 # Create Virtual Environment With Conda
 
+[Index](#Index)
+
 - conda create -n py392_webplayground python=3.9.2
 - activate : $ conda activate py392_webplayground
 - deactivate : $ conda deactivate
 
 # Password Login
 
+[Index](#Index)
+
 admin | 1234
 
 # Link de Post
 
+[Index](#Index)
+
 # Requirements
+
+[Index](#Index)
 
 pip freeze > requirements.txt
 
 # Documentation Web Playground
 
+[Index](#Index)
+
 ## First CBV and Template View
+
+[Index](#Index)
 
 To create our first CBV “Class Base View” we use the Template View. We have a page [http://ccbv.co.uk/](http://ccbv.co.uk/) where we find the Template View, and the step are next:
 
@@ -119,6 +143,8 @@ Here is the github repository:
 
 ## Config App Pages
 
+[Index](#Index)
+
 settings.py
 
 ```
@@ -185,6 +211,7 @@ In this links copy some text [https://www.lipsum.com/](https://www.lipsum.com/) 
 
 ## ListView and DetailView
 
+[Index
 
 [http://ccbv.co.uk/projects/Django/3.1/django.views.generic.list/ListView/](http://ccbv.co.uk/projects/Django/3.1/django.views.generic.list/ListView/)
 
@@ -243,6 +270,8 @@ And in the for in page_list.html
 The objects is call through page_list
 
 ## CRUD Views CBV Create View
+
+[Index](#Index)
 
 Create a new file named pages_menu.html in pages/templates/includes with the next code:
 
@@ -403,6 +432,8 @@ Then we create a form in pages/templates/pages/ call it page_form with the next 
 
 ## CRUD Views CBV UpdateView
 
+[Index](#Index)
+
 In page/views.py
 
 ```
@@ -481,6 +512,8 @@ Thats all friends
 
 ## CRUD Views CBV DeleteView
 
+[Index](#Index)
+
 In pages/views.py
 
 ```
@@ -522,6 +555,8 @@ In pages/templates/pages create a new file called page_confirm_delete.html with 
 ```
 
 ## Forms for Models in CBV
+
+[Index](#Index)
 
 In pages/views.py
 
@@ -656,6 +691,8 @@ admin.site.register(Page, PageAdmin)
 
 ## Create a Id Mixing
 
+[Index](#Index)
+
 As our views that we have created are publick we need to solve this problem.
 
 ```
@@ -680,6 +717,8 @@ And for each class view we add the StaffRequiredMixin as priority
 `class PageDelete(StaffRequiredMixin, DeleteView):`
 
 ## Using ID Decorators
+
+[Index](#Index)
 
 pages/views.py
 
