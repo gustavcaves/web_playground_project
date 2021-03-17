@@ -20,6 +20,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    9. [Using ID Decorators](#Using-ID-Decorators)
    10. [8th App "Registration" Start Session](#8th-App-"Registration"-Start-Session)
    11. [Closing the session](#Closing-the-session)
+   12. [Register with CBV](#Register-with-CBV)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -911,6 +912,8 @@ Try login and logout, see the result.
 Has been so easy, ¿true?
 
 ## Register with CBV
+
+[Index](#Index)
 
 In urls.py general add this:
 
