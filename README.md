@@ -799,7 +799,6 @@ Using the URLconf defined in `web_playground.urls`, Django tried these URL patte
 
 The current path, `accounts`, didn't match any of these.
 
-
 http://ccbv.co.uk/ | AUTH VIEWS
 
 Only we have to establish the templates or extend if we need do it
@@ -872,7 +871,6 @@ LOGIN_REDIRECT_URL = 'home'
 
 Try again and this work, it redirect the page.
 
-
 # Closing the session
 
 [Index](#Index)
@@ -911,6 +909,73 @@ LOGOUT_REDIRECT_URL = 'pages:pages'
 Try login and logout, see the result.
 
 Has been so easy, ¿true?
+
+## Register with CBV
+
+In urls.py general add this:
+
+`    path('accounts/', include('registration.urls')),`
+
+In registration/views.py
+
+```
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+
+# Create your views here.
+
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'registration/signup.html'
+
+    def get_success_url(self):
+        return reverse_lazy('login') + '?register'
+```
+
+Create a file urls.py in registrations:
+
+```
+from django.urls import path
+from .views import SignUpView
+
+urlpatterns = [
+    path('signup/', SignUpView.as_view(), name="signup")
+]
+
+```
+
+Create a file in registration/templates/registration called signup.html
+
+```
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Registro{% endblock %}
+{% block content %}
+<style>.errorlist{color:red;}</style>
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <form action="" method="post">{% csrf_token %}
+          <h3 class="mb-4">Registro</h3>
+          {{form.as_p}}
+          <p><input type="submit" class="btn btn-primary btn-block" value="Acceder"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+```
+
+Try in the web browser. And ¡Wala!
+
+
+
+
+
+
 
 # Comments
 
