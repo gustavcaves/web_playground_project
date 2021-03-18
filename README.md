@@ -1133,6 +1133,15 @@ Now in the project there is a folder called it send_email where you will find th
 
 Try reset it is complete functional.
 
+In registration/templates/registration/login.html after the form add
+
+`        
+
+¿Ha olvidado su clave? Puede restaurarla [aquí]({% url 'password_reset' %})
+
+`
+
+
 
 
 
