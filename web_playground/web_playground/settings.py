@@ -130,3 +130,11 @@ STATIC_URL = '/static/'
 # Auth redirect
 LOGIN_REDIRECT_URL = 'pages:pages'
 LOGOUT_REDIRECT_URL = 'pages:pages'
+
+# Emails Local
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+    EMAIL_FILE_PATH = os.path.join(BASE_DIR, "send_emails")
+else:
+    # HERE REAL EMAIL FOR PRODUCTION
+    pass

@@ -1,0 +1,25 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Password reset on 127.0.0.1:8000
+From: webmaster@localhost
+To: pepito5@pepito.com
+Date: Thu, 18 Mar 2021 18:51:50 -0000
+Message-ID: <161609351065.15212.10771291614977737217@DESKTOP-19I8JRH>
+
+
+You're receiving this email because you requested a password reset for your user account at 127.0.0.1:8000.
+
+Please go to the following page and choose a new password:
+
+http://127.0.0.1:8000/accounts/reset/Ng/5p1-b856563cb02f7f4c167b/
+
+Your username, in case you've forgotten: pepito6
+
+Thanks for using our site!
+
+The 127.0.0.1:8000 team
+
+
+
+-------------------------------------------------------------------------------

@@ -1102,8 +1102,33 @@ In forms.py of registrations app
         return email
 ```
 
+## Password Forget?
 
+In settings.py general add
 
+```
+# Emails Local
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+    EMAIL_FILE_PATH = os.path.join(BASE_DIR, "send_emails")
+else:
+    # HERE REAL EMAIL FOR PRODUCTION
+    pass
+```
+
+Go to  http://127.0.0.1:8000/accounts/password_reset/
+
+And update the templates html, are in bases_files folder, copy in registration/templates/registrations/
+
+Then you will see the new format of the form. Is so cool.
+
+The original files are in django/django/contrib/admin/templates/registration
+
+Send an email to pepipo5@pepito.com then the url will be http://127.0.0.1:8000/accounts/password_reset/done/
+
+Now in the project there is a folder called it send_email where you will find the email for reset the password.
+
+Try reset it is complete functional.
 
 
 
