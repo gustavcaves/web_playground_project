@@ -24,6 +24,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    13. [Beauty Register with CBV](#Beauty-Register-with-CBV)
    14. [Obligatory EMAIL](#Obligatory-EMAIL)
    15. [Unique Email](#Unique-Email)
+   16. [Password Forget?](Password-Forget?)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1103,6 +1104,8 @@ In forms.py of registrations app
 ```
 
 ## Password Forget?
+
+[Index](#Index)
 
 In settings.py general add
 
