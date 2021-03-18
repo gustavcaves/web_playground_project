@@ -21,6 +21,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    10. [8th App "Registration" Start Session](#8th-App-"Registration"-Start-Session)
    11. [Closing the session](#Closing-the-session)
    12. [Register with CBV](#Register-with-CBV)
+   13. [Beauty Register with CBV](#Beauty-Register-with-CBV)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -872,7 +873,7 @@ LOGIN_REDIRECT_URL = 'home'
 
 Try again and this work, it redirect the page.
 
-# Closing the session
+## Closing the session
 
 [Index](#Index)
 
@@ -973,6 +974,90 @@ Create a file in registration/templates/registration called signup.html
 ```
 
 Try in the web browser. And ¡Wala!
+
+## Beauty Register with CBV
+
+[Index](#Index)
+
+In http://127.0.0.1:8000/accounts/signup/ with Ctr+U view-source
+
+```
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <form action="" method="post"><input type="hidden" name="csrfmiddlewaretoken" value="QjrXfQeESTfb3gA4zupoGxDfpUJ1qwv6WUmnaPxJGWnMBHAbQqnbBAJXLnD8L0IG">
+          <h3 class="mb-4">Registro</h3>
+          <p><label for="id_username">Username:</label> <input type="text" name="username" maxlength="150" autofocus required id="id_username"> <span class="helptext">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span></p>
+<p><label for="id_password1">Password:</label> <input type="password" name="password1" required id="id_password1"> <span class="helptext"><ul><li>Your password can't be too similar to your other personal information.</li><li>Your password must contain at least 8 characters.</li><li>Your password can't be a commonly used password.</li><li>Your password can't be entirely numeric.</li></ul></span></p>
+<p><label for="id_password2">Password confirmation:</label> <input type="password" name="password2" required id="id_password2"> <span class="helptext">Enter the same password as before, for verification.</span></p>
+          <p><input type="submit" class="btn btn-primary btn-block" value="Acceder"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+```
+
+Three inputs: username | password1 | password2
+
+In registration/views.py
+
+`from django import forms`
+
+```
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'registration/signup.html'
+
+    def get_success_url(self):
+        return reverse_lazy('login') + '?register'
+
+    def get_form(self, form_class=None):
+        form = super(SignUpView, self).get_form()
+        # Modify in real time
+        form.fields['username'].widget = forms.TextInput(attrs={'class':'form-control mb-2', 'placeholder':'Nombre de usuario'})
+        form.fields['password1'].widget = forms.PasswordInput(attrs={'class':'form-control mb-2', 'placeholder':'Contraseña'})
+        form.fields['password2'].widget = forms.PasswordInput(attrs={'class':'form-control mb-2', 'placeholder':'Repite la contraseña'})
+        return form
+```
+
+In registration/templates/registration/signup.html'
+
+`use label = diplay=none`
+
+In core/templates/core/base.html
+
+```
+{% if not request.user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Acceder</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'signup' %}">Registro</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Salir</a>
+                </li>
+               {% endif %}
+```
+
+Well, so here we have a basic view about registration.
+
+Let´s continue...
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
