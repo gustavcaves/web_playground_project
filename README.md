@@ -22,7 +22,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    11. [Closing the session](#Closing-the-session)
    12. [Register with CBV](#Register-with-CBV)
    13. [Beauty Register with CBV](#Beauty-Register-with-CBV)
-   14. [Obligatory EMAIL](Obligatory-EMAIL)
+   14. [Obligatory EMAIL](#Obligatory-EMAIL)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1087,6 +1087,19 @@ class SignUpView(CreateView):
 `form.fields['email'].widget = forms.EmailInput(attrs={'class':'form-control mb-2', 'placeholder':'Direccion email'})`
 
 
+## Unique Email
+
+[Index](#Index)
+
+In forms.py of registrations app
+
+```
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("El email ya esta registrado, prueba con otro.")
+        return email
+```
 
 
 
