@@ -22,6 +22,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    11. [Closing the session](#Closing-the-session)
    12. [Register with CBV](#Register-with-CBV)
    13. [Beauty Register with CBV](#Beauty-Register-with-CBV)
+   14. [Obligatory EMAIL](Obligatory-EMAIL)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1047,6 +1048,43 @@ Well, so here we have a basic view about registration.
 
 Let´s continue...
 
+## Obligatory EMAIL
+
+[Index](#Index)
+
+In registrations create e new file called it forms.py
+
+```
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.forms import fields
+
+class UserCreationFormWithEmail(UserCreationForm):
+    email = forms.EmailField(required=True, help_text="Requerido, 254 caracteres maximo y debe ser válido")
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+```
+
+In views.py registration
+
+```
+# from django.contrib.auth.forms import UserCreationForm # | THIS NOT BECAUSE WE EXTENDED A NEW VERSION IN REGISTRATIONS/FORMS.PY
+from .forms import UserCreationFormWithEmail
+```
+
+
+```
+class SignUpView(CreateView):
+    # form_class = UserCreationForm # | THIS NOT UPDATE WITH EMAIL
+    form_class = UserCreationFormWithEmail
+```
+
+
+`form.fields['email'].widget = forms.EmailInput(attrs={'class':'form-control mb-2', 'placeholder':'Direccion email'})`
 
 
 
