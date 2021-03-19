@@ -25,6 +25,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    14. [Obligatory EMAIL](#Obligatory-EMAIL)
    15. [Unique Email](#Unique-Email)
    16. [Password Forget?](#Password-Forget?)
+   17. [User Profile](#User-Profile)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1078,16 +1079,13 @@ In views.py registration
 from .forms import UserCreationFormWithEmail
 ```
 
-
 ```
 class SignUpView(CreateView):
     # form_class = UserCreationForm # | THIS NOT UPDATE WITH EMAIL
     form_class = UserCreationFormWithEmail
 ```
 
-
 `form.fields['email'].widget = forms.EmailInput(attrs={'class':'form-control mb-2', 'placeholder':'Direccion email'})`
-
 
 ## Unique Email
 
@@ -1135,16 +1133,115 @@ Try reset it is complete functional.
 
 In registration/templates/registration/login.html after the form add
 
-`        
+`
 
 ¿Ha olvidado su clave? Puede restaurarla [aquí]({% url 'password_reset' %})
 
 `
 
+## User Profile
+
+[Index](#Index)
 
 
 
+registration/models.py
 
+```
+from django.db import models
+from django.contrib.auth.models import User
+
+# Create your models here.
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='profiles', null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
+    link = models.URLField(max_length=200, null=True, blank=True)
+```
+
+
+
+registration/views.py
+
+```
+from django.views.generic.base import TemplateView
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
+
+@method_decorator(login_required, name='dispatch')
+class ProfileUpdate(TemplateView):
+    template_name = 'registration/profile_form.html'
+
+
+```
+
+registration/urls.py
+
+```
+from django.urls import path
+from .views import SignUpView, ProfileUpdate
+
+urlpatterns = [
+    path('signup/', SignUpView.as_view(), name="signup"),
+    path('profile/', ProfileUpdate.as_view(), name="profile"),
+]
+
+```
+
+general setting.py
+
+```
+# Auth redirect
+# LOGIN_REDIRECT_URL = 'pages:pages'
+```
+
+For Pillow
+
+```
+# Media Files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+```
+
+general urls.py
+
+`from django.conf import settings`
+
+```
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+create a file in templates/registration called it profile_form.html
+
+```
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+
+<main role="main">
+  <div class="container">
+    <div class="row mt-3 mb-5">
+      <div class="col-md-9 mx-auto">
+            <h3>Perfil</h3>
+            <form action="" method="post">{% csrf_token %}
+                    {{ form.as_p }}
+                <div class="text-center">
+                <input type="submit" class="btn btn-primary btn-block" value="Actualizar" />
+                </div>
+            </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+```
+
+Wala! Is working on.
 
 
 
