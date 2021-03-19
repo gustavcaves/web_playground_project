@@ -1,5 +1,5 @@
 # from django.contrib.auth.forms import UserCreationForm # | THIS NOT BECAUSE WE EXTENDED A NEW VERSION IN REGISTRATIONS/FORMS.PY
-from .forms import UserCreationFormWithEmail
+from .forms import UserCreationFormWithEmail, ProfileForm
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
@@ -33,8 +33,9 @@ class SignUpView(CreateView):
 
 @method_decorator(login_required, name='dispatch')
 class ProfileUpdate(UpdateView):
-    model = Profile
-    fields = ['avatar', 'bio', 'link']
+    # model = Profile # UNNECESSARY BECAUSE COMES FROM REGISTRATION´S FORMS.PY
+    # fields = ['avatar', 'bio', 'link'] # UNNECESSARY BECAUSE COMES FROM REGISTRATION´S FORMS.PY
+    form_class = ProfileForm
     success_url = reverse_lazy('profile')
     template_name = 'registration/profile_form.html'
 

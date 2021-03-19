@@ -27,6 +27,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    16. [Password Forget?](#Password-Forget?)
    17. [User Profile](#User-Profile)
    18. [Editable Profile](#Editable-Profile)
+   19. [Beauty Profile Form](Beauty-Profile-Form)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1272,8 +1273,138 @@ templates/registration/profile_form.html
 Working on... Great!!!
 
 
+## Beauty Profile Form
+
+[Index](#Index)
+
+registration/forms.py
+
+`from .models import Profile`
+
+```
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'bio', 'link']
+        widgets = {
+            'avatar': forms.ClearableFileInput(attrs={'class':'form-control-file mt-3'}),
+            'bio': forms.Textarea(attrs={'class':'form-control mt-3', 'row':3, 'placeholder':'Biografía'}),
+            'link': forms.URLInput(attrs={'class':'form-control mt-3', 'placeholder':'Enlace'}),
+        }
+
+```
+
+registration/views.py
+
+`from .forms import UserCreationFormWithEmail, ProfileForm`
+
+```
+@method_decorator(login_required, name='dispatch')
+class ProfileUpdate(UpdateView):
+    # model = Profile # UNNECESSARY BECAUSE COMES FROM REGISTRATION´S FORMS.PY
+    # fields = ['avatar', 'bio', 'link'] # UNNECESSARY BECAUSE COMES FROM REGISTRATION´S FORMS.PY
+    form_class = ProfileForm
+    success_url = reverse_lazy('profile')
+    template_name = 'registration/profile_form.html'
+
+    def get_object(self):
+        # RECOVER THE OBJECT WILL EDIT
+        profile, created = Profile.objects.get_or_create(user=self.request.user)
+        return profile
+```
 
 
+profile_form.html
+
+````python
+<style>label{display:none}</style>
+```
+````
+
+and change for 
+
+https://gist.github.com/gustavcaves/6a19ebca8b92d46bc0d85e5751e8711c
+
+````python
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+<style>.errorlist{color:red;} label{display:none}</style>
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+          <div class="row">
+            <!-- Previa del avatar -->
+            <div class="col-md-2">
+              {% if request.user.profile.avatar %}
+                <img src="{{request.user.profile.avatar.url}}" class="img-fluid">
+                <p class="mt-1">¿Borrar? <input type="checkbox" id="avatar-clear" name="avatar-clear" /></p>
+              {% endif %}
+            </div>
+            <!-- Formulario -->
+            <div class="col-md-10">
+              <h3>Perfil</h3>
+              <input type="file" name="avatar" class="form-control-file mt-3" id="id_avatar">
+              {{ form.bio }}
+              {{ form.link }}
+              <input type="submit" class="btn btn-primary btn-block mt-3" value="Actualizar">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+```
+````
+
+At the of the profile_form.py
+
+```
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+<style>.errorlist{color:red;} label{display:none}</style>
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+          <div class="row">
+            <!-- Previa del avatar -->
+            <div class="col-md-2">
+              {% if request.user.profile.avatar %}
+                <img src="{{request.user.profile.avatar.url}}" class="img-fluid">
+                <p class="mt-1">¿Borrar? <input type="checkbox" id="avatar-clear" name="avatar-clear" /></p>
+              {% else %}
+                <img src="{% static 'registration/img/no-avatar.jpg' %}" class="img-fluid">
+              {% endif %}
+            </div>
+            <!-- Formulario -->
+            <div class="col-md-10">
+              <h3>Perfil</h3>
+              <input type="file" name="avatar" class="form-control-file mt-3" id="id_avatar">
+              {{ form.bio }}
+              {{ form.link }}
+              <input type="submit" class="btn btn-primary btn-block mt-3" value="Actualizar">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+```
+
+And again is working on ... Great!!
+
+Let´s continue...
 
 
 
