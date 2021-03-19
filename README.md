@@ -27,7 +27,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    16. [Password Forget?](#Password-Forget?)
    17. [User Profile](#User-Profile)
    18. [Editable Profile](#Editable-Profile)
-   19. [Beauty Profile Form](Beauty-Profile-Form)
+   19. [Beauty Profile Form](#Beauty-Profile-Form)
 6. [Comments](#Comments)
 
 # How to upload this repository
