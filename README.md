@@ -26,6 +26,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    15. [Unique Email](#Unique-Email)
    16. [Password Forget?](#Password-Forget?)
    17. [User Profile](#User-Profile)
+   18. [Editable Profile](#Editable-Profile)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1143,8 +1144,6 @@ In registration/templates/registration/login.html after the form add
 
 [Index](#Index)
 
-
-
 registration/models.py
 
 ```
@@ -1159,8 +1158,6 @@ class Profile(models.Model):
     bio = models.TextField(null=True, blank=True)
     link = models.URLField(max_length=200, null=True, blank=True)
 ```
-
-
 
 registration/views.py
 
@@ -1242,6 +1239,42 @@ create a file in templates/registration called it profile_form.html
 ```
 
 Wala! Is working on.
+
+## Editable Profile
+
+[Index](#Index)
+
+First
+
+`````python
+python manage.py makemigrations registration
+python manage.py migrate registration
+`````
+
+Transform TemplateView to UpdateView for our profile in registrations´s views.py
+
+```
+# from django.views.generic.base import TemplateView # UNNECESARY FOR PROFILE UPDATE 
+from django.views.generic.edit import UpdateView
+```
+
+```
+@method_decorator(login_required, name='dispatch')
+class ProfileUpdate(UpdateView):
+```
+
+templates/registration/profile_form.html
+
+````python
+            <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}```
+````
+
+Working on... Great!!!
+
+
+
+
+
 
 
 
