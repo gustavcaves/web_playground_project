@@ -29,6 +29,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    18. [Editable Profile](#Editable-Profile)
    19. [Beauty Profile Form](#Beauty-Profile-Form)
    20. [Edit Email](#Edit-Email)
+   21. [Intro To Signals](#Intro-To-Signals)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1491,7 +1492,42 @@ That all friends... Is so cool!!!
 
 Thanks
 
+## Intro To Signals
 
+[Index](#Index)
+
+Triggers
+
+Registration/models.py
+
+```
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+
+```
+
+```
+# DEFINE A SIGNAL CREATE A DEF FUCNTION
+# TO TRIGGERT AUTOMATIC WE NEED CALLED IT, USE A DECORATOR @
+@receiver(post_save, sender=User)
+def ensure_profile_exist(sender, instance, **kwargs):
+    if kwargs.get('created', False):
+        Profile.objects.get_or_create(user=instance)
+        print ("Se acaba de crear un usuario y su perfil enlazado")
+```
+
+On shell
+
+
+python manage.py shell
+
+
+>>> from registration.models import Profile
+>>> Profile.objects.get(user__username='pepito7')
+>>> <Profile: Profile object (2)>
+>>>
+>>
+>
 
 
 
