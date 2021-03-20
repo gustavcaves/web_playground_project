@@ -28,6 +28,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    17. [User Profile](#User-Profile)
    18. [Editable Profile](#Editable-Profile)
    19. [Beauty Profile Form](#Beauty-Profile-Form)
+   20. [Edit Email](#Edit-Email)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1272,7 +1273,6 @@ templates/registration/profile_form.html
 
 Working on... Great!!!
 
-
 ## Beauty Profile Form
 
 [Index](#Index)
@@ -1313,7 +1313,6 @@ class ProfileUpdate(UpdateView):
         return profile
 ```
 
-
 profile_form.html
 
 ````python
@@ -1321,7 +1320,7 @@ profile_form.html
 ```
 ````
 
-and change for 
+and change for
 
 https://gist.github.com/gustavcaves/6a19ebca8b92d46bc0d85e5751e8711c
 
@@ -1405,6 +1404,97 @@ At the of the profile_form.py
 And again is working on ... Great!!
 
 Let´s continue...
+
+## Edit Email
+
+[Index](#Index)
+
+registration/forms.py
+
+```
+class EmailForm(forms.ModelForm):
+    email = forms.EmailField(required=True, help_text="Requerido, 254 caracteres maximo y debe ser válido")
+
+    class Meta:
+        model = User
+        fields = ['email']
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if 'email' in self.cleaned_data: # IS A LIST WHO SAVE ALL DATA CHANGED IN THE FORM
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError("El email ya esta registrado, prueba con otro.")
+        return email
+```
+
+registration/view.py
+
+`from .forms import UserCreationFormWithEmail, ProfileForm, EmailForm`
+
+```
+@method_decorator(login_required, name='dispatch')
+class EmailUpdate(UpdateView):
+    form_class = EmailForm
+    success_url = reverse_lazy('profile')
+    template_name = 'registration/profile_email_form.html'
+
+    def get_object(self):
+        # RECOVER THE OBJECT WILL EDIT
+        return self.request.user
+
+    def get_form(self, form_class=None):
+  
+        form = super(EmailUpdate, self).get_form()
+        # Modify in real time
+        form.fields['email'].widget = forms.EmailInput(attrs={'class':'form-control mb-2', 'placeholder':'Email'})
+        return form
+```
+
+registration/urls.py
+
+`from .views import SignUpView, ProfileUpdate, EmailUpdate`
+
+`    path('profile/email/', EmailUpdate.as_view(), name="profile_email"),`
+
+registratinon/templates/registration/profile_form-html
+
+```
+              <input type="email" value="{{request.user.email}}" class="form-control mt-3" readonly>
+              <p class="mt-3">Si deseas editar tu email haz clic <a href="{% url 'profile_email' %}">aquí</a></p>
+```
+
+create a new file in registratinon/templates/registration called it profile_email_form.html
+
+```
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Email{% endblock %}
+{% block content %}
+<style>.errorlist{color:red;} label{display:none}</style>
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <form action="" method="post">{% csrf_token %}
+          <h3 class="mb-4">Email</h3>
+          {{form.as_p}}
+          <p><input type="submit" class="btn btn-primary btn-block" value="Actualizar"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+```
+
+That all friends... Is so cool!!!
+
+Thanks
+
+
+
+
+
 
 
 

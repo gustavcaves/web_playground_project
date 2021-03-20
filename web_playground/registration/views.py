@@ -1,5 +1,5 @@
 # from django.contrib.auth.forms import UserCreationForm # | THIS NOT BECAUSE WE EXTENDED A NEW VERSION IN REGISTRATIONS/FORMS.PY
-from .forms import UserCreationFormWithEmail, ProfileForm
+from .forms import UserCreationFormWithEmail, ProfileForm, EmailForm
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
@@ -43,3 +43,20 @@ class ProfileUpdate(UpdateView):
         # RECOVER THE OBJECT WILL EDIT
         profile, created = Profile.objects.get_or_create(user=self.request.user)
         return profile
+
+@method_decorator(login_required, name='dispatch')
+class EmailUpdate(UpdateView):
+    form_class = EmailForm
+    success_url = reverse_lazy('profile')
+    template_name = 'registration/profile_email_form.html'
+
+    def get_object(self):
+        # RECOVER THE OBJECT WILL EDIT
+        return self.request.user
+
+    def get_form(self, form_class=None):
+        
+        form = super(EmailUpdate, self).get_form()
+        # Modify in real time
+        form.fields['email'].widget = forms.EmailInput(attrs={'class':'form-control mb-2', 'placeholder':'Email'})
+        return form
