@@ -30,6 +30,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    19. [Beauty Profile Form](#Beauty-Profile-Form)
    20. [Edit Email](#Edit-Email)
    21. [Intro To Signals](#Intro-To-Signals)
+   22. [Intro to Unit Test](#Intro-to-Unit-Test)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1518,21 +1519,57 @@ def ensure_profile_exist(sender, instance, **kwargs):
 
 On shell
 
-
 python manage.py shell
-
 
 >>> from registration.models import Profile
 >>> Profile.objects.get(user__username='pepito7')
 >>> <Profile: Profile object (2)>
 >>>
 >>
->
 
+## Intro to Unit Test
 
+[Index](#Index)
 
+registration/tests.py
 
+```
+from django.test import TestCase
+from . models import Profile
+from django.contrib.auth.models import User
 
+# Create your tests here.
+class ProfileTestCase(TestCase):
+    def setUp(self):
+        User.objects.create_user('test','test@test.com', 'test1234')
+
+    def test_profile_exists(self):
+        exists = Profile.objects.filter(user__username='test').exists()
+        self.assertEqual(exists, True)
+```
+
+CMD
+
+````python
+python manage.py test registration.tests
+```
+````
+
+`````python
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+Se acaba de crear un usuario y su perfil enlazado
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.173s
+
+OK
+Destroying test database for alias 'default'...
+```
+````
+`````
+
+Is OK. Continue...
 
 
 
