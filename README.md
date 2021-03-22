@@ -1571,10 +1571,9 @@ Destroying test database for alias 'default'...
 
 Is OK. Continue...
 
+## Optimizing Avatar Storage
 
-
-
-
+[Index](#Index)
 
 
 
