@@ -31,6 +31,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    20. [Edit Email](#Edit-Email)
    21. [Intro To Signals](#Intro-To-Signals)
    22. [Intro to Unit Test](#Intro-to-Unit-Test)
+   23. [Optimizing Avatar Storage](#Optimizing-Avatar-Storage)
 6. [Comments](#Comments)
 
 # How to upload this repository
