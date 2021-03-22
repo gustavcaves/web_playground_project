@@ -1575,6 +1575,19 @@ Is OK. Continue...
 
 [Index](#Index)
 
+registration/models.py
+
+```
+def custom_upload_to(instance, filename):
+    old_instance = Profile.objects.get(pk=instance.pk)
+    old_instance.avatar.delete()
+    return 'profiles/' + filename
+```
+
+`    avatar = models.ImageField(upload_to=custom_upload_to, null=True, blank=True)`
+
+
+
 
 
 # Comments
