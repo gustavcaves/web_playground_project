@@ -33,6 +33,8 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    22. [Intro to Unit Test](#Intro-to-Unit-Test)
    23. [Optimizing Avatar Storage](#Optimizing-Avatar-Storage)
    24. [9th App Public Profiles](#9th-App-Public-Profiles)
+   25. [Pagination Of Results List View](#Pagination-Of-Results-List-View)
+   26. [10 App Messenger](10-App-Messenger)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1685,7 +1687,7 @@ return self.paginator_class()
 
 All Ok.
 
-## 9th App Messenger
+## 10 App Messenger
 
 [Index](#Index)
 
