@@ -1685,6 +1685,50 @@ return self.paginator_class()
 
 All Ok.
 
+## 9th App Messenger
+
+[Index](#Index)
+
+
+````python
+python manage.py startapp messenger
+```
+````
+
+
+messenger/models.py
+
+```
+from django.db import models
+
+from django.contrib.auth.models import User
+
+# Create your models here.
+
+class Message(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created']
+
+class Thread(models.Model):
+    users = models.ManyToManyField(User, related_name='threads')
+    messages = models.ManyToManyField(Message)
+```
+
+CMD
+
+````python
+python manage.py makemigrations messenger
+python manage.py migrate messenger
+```
+````
+
+Thats all Friends...
+
+
 
 
 
