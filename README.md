@@ -1622,6 +1622,73 @@ path('profiles/', include(profiles_patterns)),
 ````
 `````
 
+## Pagination Of Results List View
+
+[Index](#Index)
+
+registration/model.py
+
+```
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to=custom_upload_to, null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
+    link = models.URLField(max_length=200, null=True, blank=True)
+
+    class Meta:
+        ordering = ['user__username']
+```
+
+
+
+https://gist.github.com/gustavcaves/ee08435e472981b1d89c34b3325be1e2
+
+profiles/templates/profiles/profile_list.html
+
+````python
+        <!-- Menú de paginación -->
+          {% if is_paginated %}
+            <nav aria-label="Page navigation">
+              <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                  <li class="page-item ">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">«</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">«</a>
+                  </li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                  <li class="page-item {% if page_obj.number == i %}active{% endif %}">
+                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                  </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                  <li class="page-item ">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">»</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">»</a>
+                  </li>
+                {% endif %}
+              </ul>
+            </nav>
+          {% endif %}
+```
+````
+
+
+UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'registration.models.Profile'> QuerySet.
+return self.paginator_class()
+
+All Ok.
+
+
+
+
+
 # Comments
 
 [Index](#Index)
