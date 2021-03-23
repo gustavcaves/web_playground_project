@@ -32,6 +32,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    21. [Intro To Signals](#Intro-To-Signals)
    22. [Intro to Unit Test](#Intro-to-Unit-Test)
    23. [Optimizing Avatar Storage](#Optimizing-Avatar-Storage)
+   24. [9th App Public Profiles](#9th-App-Public-Profiles)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1587,9 +1588,39 @@ def custom_upload_to(instance, filename):
 
 `    avatar = models.ImageField(upload_to=custom_upload_to, null=True, blank=True)`
 
+## 9th App Public Profiles
 
+[Index](#Index)
 
+Copia esta app profiles en tu proyecto webplayground:
 
+· En Windows ->	C:\CursoDjango\webplayground
+· En Mac OS -> /Users/tu_usuario/Documents/CursoDjango/webplayground
+· En Linux -> /home/tu_usuario/CursoDjango/webplayground
+
+Para utilizarla debes hacer lo siguiente:
+
+* [X] · Añade la app profiles en la lista INSTALLED_APPS de settings.py
+* [X] · Configura las urls globales:
+
+````python
+from profiles.urls import profiles_patterns
+
+# Paths de profiles
+
+path('profiles/', include(profiles_patterns)),
+```
+````
+
+* [X] · Añade la sección al menú superior en base.html:
+
+`````python
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'profiles:list' %}">Perfiles</a>
+    </li>
+```
+````
+`````
 
 # Comments
 
