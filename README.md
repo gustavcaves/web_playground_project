@@ -1791,6 +1791,89 @@ python manage.py test messenger.tests.ThreadTestCase.test_add_user_to_thread
 ```
 ````
 
+messenger/tests.py
+
+```
+    def test_filter_thread_by_users(self):
+        self.thread.users.add(self.user1, self.user2)
+        threads = Thread.objects.filter(users=self.user1).filter(users=self.user2)
+        self.assertEqual(self.thread, threads[0])
+```
+
+CMD
+
+````python
+python manage.py test messenger.tests.ThreadTestCase.test_filter_thread_by_users
+
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.341s
+
+OK
+Destroying test database for alias 'default'...
+```
+````
+
+```
+from logging import setLoggerClass
+from django.test import TestCase
+
+from django.contrib.auth.models import User
+from django.test.testcases import SerializeMixin
+from .models import Thread, Message
+
+# Create your tests here.
+class ThreadTestCase(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user('user1', None, 'test1234')
+        self.user2 = User.objects.create_user('user2', None, 'test1234')
+
+        self.thread = Thread.objects.create()
+
+    def test_add_user_to_thread(self):
+        self.thread.users.add(self.user1, self.user2)
+        self.assertEqual(len(self.thread.users.all()), 2)
+
+    def test_filter_thread_by_users(self):
+        self.thread.users.add(self.user1, self.user2)
+        threads = Thread.objects.filter(users=self.user1).filter(users=self.user2)
+        self.assertEqual(self.thread, threads[0])
+
+    def test_filter_non_existent_thread(self):
+        threads = Thread.objects.filter(users=self.user1).filter(users=self.user2)
+        self.assertEqual(len(threads), 0)
+
+    def test_add_messages_to_thread(self):
+        self.thread.users.add(self.user1, self.user2)
+        message1 = Message.objects.create(user=self.user1, content="Muy Buenas")
+        message2 = Message.objects.create(user=self.user2, content="Hola")
+        self.thread.messages.add(message1, message2)
+        self.assertEqual(len(self.thread.messages.all()), 2)
+
+        for message in self.thread.messages.all():
+            print("({}): {}".format(message.user, message.content))
+```
+
+````python
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+(user1): Muy Buenas
+(user2): Hola
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.920s
+
+OK
+Destroying test database for alias 'default'...
+```
+````
+
+
+
+This can´t considered TDD, all of this has given to us from django, we dont writing code here yet.
+
 
 
 
