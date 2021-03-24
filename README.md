@@ -35,6 +35,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    24. [9th App Public Profiles](#9th-App-Public-Profiles)
    25. [Pagination Of Results List View](#Pagination-Of-Results-List-View)
    26. [10 App Messenger](10-App-Messenger)
+   27. [TDD 1 Firts Test](#TDD-1-Firts-Test)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1641,8 +1642,6 @@ class Profile(models.Model):
         ordering = ['user__username']
 ```
 
-
-
 https://gist.github.com/gustavcaves/ee08435e472981b1d89c34b3325be1e2
 
 profiles/templates/profiles/profile_list.html
@@ -1681,7 +1680,6 @@ profiles/templates/profiles/profile_list.html
 ```
 ````
 
-
 UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'registration.models.Profile'> QuerySet.
 return self.paginator_class()
 
@@ -1691,12 +1689,10 @@ All Ok.
 
 [Index](#Index)
 
-
 ````python
 python manage.py startapp messenger
 ```
 ````
-
 
 messenger/models.py
 
@@ -1729,6 +1725,72 @@ python manage.py migrate messenger
 ````
 
 Thats all Friends...
+
+## TDD 1 Firts Test
+
+[Index](#Index)
+
+messenger/models.py
+
+```
+from django.test import TestCase
+
+from django.contrib.auth.models import User
+from .models import Thread, Message
+
+# Create your tests here.
+class ThreadTestCase(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user('user1', None, 'test1234')
+        self.user2 = User.objects.create_user('user2', None, 'test1234')
+
+        self.thread = Thread.objects.create()
+
+    def test_add_user_to_thread(self):
+        self.thread.users.add(self.user1, self.user2)
+        self.assertEqual(len(self.thread.users.all()), 2)
+
+```
+
+CMD
+
+````python
+python manage.py test messenger.tests
+
+
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+Se acaba de crear un usuario y su perfil enlazado
+Se acaba de crear un usuario y su perfil enlazado
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.301s
+
+OK
+Destroying test database for alias 'default'...
+
+```
+````
+
+registration/models.py
+
+`        # print ("Se acaba de crear un usuario y su perfil enlazado")`
+
+
+We can call only one test, try
+
+````python
+python manage.py test messenger.tests.ThreadTestCase
+```
+````
+
+Or even past more
+
+````python
+python manage.py test messenger.tests.ThreadTestCase.test_add_user_to_thread
+```
+````
+
 
 
 
