@@ -37,6 +37,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    26. [10 App Messenger](10-App-Messenger)
    27. [TDD 1 Firts Test](#TDD-1-Firts-Test)
    28. [TDD 2 Refactoring](#TDD-2-Refactoring)
+   29. [TDD 3 Creating Model Manager](#TDD-3-Creating-Model-Manager)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1936,6 +1937,71 @@ Destroying test database for alias 'default'...
 
 This is TDD because we are useing refactoring.
 
+
+## TDD 3 Creating Model Manager
+
+[Index](#Index)
+
+messenger/tests.py
+
+```
+    def test_find_thread_with_custom_manager(self):
+        self.thread.users.add(self.user1, self.user2)
+        thread = Thread.objects.find(self.user1, self.user2)
+        self.assertEqual(self.thread, thread)
+
+    def test_find_or_create_thread_with_custom_manager(self):
+        self.thread.users.add(self.user1, self.user2)
+        thread = Thread.objects.find_or_create(self.user1, self.user2)
+        self.assertEqual(self.thread, thread)
+        thread = Thread.objects.find_or_create(self.user1, self.user3)
+        self.assertIsNotNone(thread)
+```
+
+messenger/models.py
+
+```
+class ThreadManager(models.Manager):
+    def find(self, user1, user2):
+    # Dentro de un object manager la palabar "self" siempre hacer refencia al propio queryset que contiene todas las intancias de ese modelo. En este caso Thread | self == Thread.objects.all()
+        query_set = self.filter(users=user1).filter(users=user2)
+        if len(query_set) > 0:
+            return query_set[0]
+        return None
+
+    def find_or_create(self, user1, user2):
+        thread = self.find(user1, user2)
+        if thread is None:
+            thread = Thread.objects.create()
+            thread.users.add(user1, user2)
+        return thread
+```
+
+test in execution
+
+````python
+python manage.py test messenger.tests
+C:\www_dj\web_playground\web_playground\messenger\models.py:47: SyntaxWarning: "is" with a literal. Did you mean "=="?
+  if action is "pre_add":
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+Thread object (1) pre_add {1, 2, 3}
+Ups, (user3) no forma parte del hilo
+Thread object (1) post_add {1, 2}
+.Thread object (2) pre_add {4, 5}
+Thread object (2) post_add {4, 5}
+(user1): Muy Buenas
+(user2): Hola
+......
+----------------------------------------------------------------------
+Ran 7 tests in 2.749s
+
+OK
+Destroying test database for alias 'default'...
+```
+````
+
+Beautiful, now in real scary...
 
 
 # Comments
