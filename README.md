@@ -36,6 +36,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    25. [Pagination Of Results List View](#Pagination-Of-Results-List-View)
    26. [10 App Messenger](10-App-Messenger)
    27. [TDD 1 Firts Test](#TDD-1-Firts-Test)
+   28. [TDD 2 Refactoring](#TDD-2-Refactoring)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -1776,7 +1777,6 @@ registration/models.py
 
 `        # print ("Se acaba de crear un usuario y su perfil enlazado")`
 
-
 We can call only one test, try
 
 ````python
@@ -1870,13 +1870,71 @@ Destroying test database for alias 'default'...
 ```
 ````
 
-
-
 This can´t considered TDD, all of this has given to us from django, we dont writing code here yet.
 
+## TDD 2 Refactoring
+
+[Index](#Index)
+
+messenger/models.py
+
+`from django.db.models.signals import m2m_changed`
+
+```
+def messages_changed(sender, **kwargs):
+    instance = kwargs.pop("instance", None)
+    action = kwargs.pop("action", None)
+    pk_set = kwargs.pop("pk_set", None)
+    print(instance, action, pk_set)
+
+    false_pk_set = set()
+    if action is "pre_add":
+        for msg_pk in pk_set:
+            msg = Message.objects.get(pk=msg_pk)
+            if msg.user not in instance.users.all():
+                print("Ups, ({}) no forma parte del hilo".format(msg.user))
+                false_pk_set.add(msg_pk)
+  
+    # Buscar los mensajes de false_pk_set que si estan en pk_set y los borramos de pk_set
+    pk_set.difference_update(false_pk_set)
+  
+m2m_changed.connect(messages_changed, sender=Thread.messages.through)
+```
+
+messenger/test.py
+
+```
+    def test_add_message_from_user_not_in_thread(self):
+        self.thread.users.add(self.user1, self.user2)
+        message1 = Message.objects.create(user=self.user1, content="Muy Buenas")
+        message2 = Message.objects.create(user=self.user2, content="Hola")
+        message3 = Message.objects.create(user=self.user3, content="Soy un espia")
+        self.thread.messages.add(message1, message2, message3)
+        self.assertEqual(len(self.thread.messages.all()), 2)
+```
 
 
+````python
+test messenger.tests.ThreadTestCase.test_add_message_from_user_not_in_thread     
+C:\www_dj\web_playground\web_playground\messenger\models.py:28: SyntaxWarning: "is" with a literal. Did you mean "=="?
+  if action is "pre_add":
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+Thread object (1) pre_add {1, 2, 3}
+Ups, (user3) no forma parte del hilo
+Thread object (1) post_add {1, 2}
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.665s
 
+OK
+Destroying test database for alias 'default'...
+
+```
+````
+
+
+This is TDD because we are useing refactoring.
 
 
 
