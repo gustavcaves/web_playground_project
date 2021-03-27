@@ -38,6 +38,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    27. [TDD 1 Firts Test](#TDD-1-Firts-Test)
    28. [TDD 2 Refactoring](#TDD-2-Refactoring)
    29. [TDD 3 Creating Model Manager](#TDD-3-Creating-Model-Manager)
+   30. [Urls Views and Templates to Messenger](#Urls-Views-and-Templates-to-Messenger)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -2002,6 +2003,138 @@ Destroying test database for alias 'default'...
 ````
 
 Beautiful, now in real scary...
+
+
+## Urls Views and Templates to Messenger
+
+[Index](#Index)
+
+in shell
+
+````python
+python manage.py shell
+Python 3.9.2 (default, Mar  3 2021, 15:03:14) [MSC v.1916 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from django.contrib.auth.models import User
+>>> from messenger.models impot Thread, Message
+  File "<console>", line 1
+    from messenger.models impot Thread, Message
+                          ^
+SyntaxError: invalid syntax
+>>> from messenger.models import Thread, Message 
+>>> gustav = User.objects.get(username="gustav")
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\miniconda3\envs\py392_webplayground\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\miniconda3\envs\py392_webplayground\lib\site-packages\django\db\models\query.py", line 397, in get
+    raise self.model.DoesNotExist(
+django.contrib.auth.models.User.DoesNotExist: User matching query does not exist.
+>>> admin = User.objects.get(username="admin")   
+>>> pepito8 = User.objects.get(username="pepito8")
+>>> thread = Thread.objects.find_or_create(admin, pepito8)
+>>> tread.messages.add(Message.objects.create(user=admin, content="Buenos Días"))
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+NameError: name 'tread' is not defined
+>>> thread.messages.add(Message.objects.create(user=admin, content="Buenos Días"))
+Thread object (1) pre_add {1}
+Thread object (1) post_add {1}
+>>> thread.messages.add(Message.objects.create(user=pepito8, content="Hola admin"))
+Thread object (1) pre_add {2}
+Thread object (1) post_add {2}
+>>> thread.messages.add(Message.objects.create(user=admin, content="Me voy"))
+Thread object (1) pre_add {3}
+Thread object (1) post_add {3}
+>>> thread.messages.add(Message.objects.create(user=pepito8, content="Pues, Adios"))
+Thread object (1) pre_add {4}
+Thread object (1) post_add {4}
+>>> exit()
+```
+````
+
+messenger/urls.py
+
+```
+from django.urls import path
+from .views import ThreadList, ThreadDetail
+
+messenger_patterns = ([
+    path('', ThreadList.as_view(), name="list"),
+    path('thread/<int:pk>/', ThreadDetail.as_view(), name="detail"),
+], "messenger")
+```
+
+messenger/views.py
+
+```
+from django.shortcuts import render
+
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+
+from django.views.generic import TemplateView
+
+from .models import Thread
+
+from django.http import Http404
+
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+
+# Create your views here.
+@method_decorator(login_required, name="dispatch")
+class ThreadList(TemplateView):
+    # model = Thread
+    # # Filtar un query set por defecto
+    # def get_queryset(self):
+    #     queryset = super(ThreadList, self).get_queryset()
+    #     return queryset.filter(users=self.request.users)
+    # # user.thread.all()
+    template_name = "messenger/thread_list.html"
+
+@method_decorator(login_required, name="dispatch")
+class ThreadDetail(DetailView):
+    model = Thread
+
+    def get_object(self):
+        obj = super(ThreadDetail, self).get_object()
+        if self.request.user not in obj.users.all():
+            raise Http404
+        return obj
+
+```
+
+copy templates to messenger/templates/menseenger
+
+- thread_detail.html
+- thread_list.html
+
+in urls.py general 
+
+`from messenger.urls import messenger_patterns`
+
+```
+    # Paths de messenger
+    path('messenger/', include(messenger_patterns))
+```
+
+in core/templates/core/base.html
+
+```
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'messenger:list' %}">Mensajes</a>
+                </li>
+```
+
+And try in the navigator.
+
+
+
+
+
 
 
 # Comments
