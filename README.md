@@ -88,6 +88,16 @@ admin | 1234
 
 pip freeze > requirements.txt
 
+Original Requirements:
+
+Pillow==5.0.0
+
+django==2.0.2
+
+django-ckeditor==5.4.0
+
+
+
 # Documentation Web Playground
 
 [Index](#Index)
@@ -1915,9 +1925,8 @@ messenger/test.py
         self.assertEqual(len(self.thread.messages.all()), 2)
 ```
 
-
 ````python
-test messenger.tests.ThreadTestCase.test_add_message_from_user_not_in_thread     
+test messenger.tests.ThreadTestCase.test_add_message_from_user_not_in_thread   
 C:\www_dj\web_playground\web_playground\messenger\models.py:28: SyntaxWarning: "is" with a literal. Did you mean "=="?
   if action is "pre_add":
 Creating test database for alias 'default'...
@@ -1935,9 +1944,7 @@ Destroying test database for alias 'default'...
 ```
 ````
 
-
 This is TDD because we are useing refactoring.
-
 
 ## TDD 3 Creating Model Manager
 
@@ -2003,7 +2010,6 @@ Destroying test database for alias 'default'...
 ````
 
 Beautiful, now in real scary...
-
 
 ## Urls Views and Templates to Messenger
 
@@ -2112,7 +2118,7 @@ copy templates to messenger/templates/menseenger
 - thread_detail.html
 - thread_list.html
 
-in urls.py general 
+in urls.py general
 
 `from messenger.urls import messenger_patterns`
 
@@ -2130,12 +2136,6 @@ in core/templates/core/base.html
 ```
 
 And try in the navigator.
-
-
-
-
-
-
 
 # Comments
 
