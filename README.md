@@ -2142,7 +2142,6 @@ And try in the navigator.
 
 [Index](#Index)
 
-
 messenger/views.py
 
 `from django.http import Http404, JsonResponse`
@@ -2183,12 +2182,79 @@ messenger/templates/messenger.py
 
 Ok...
 
-
 ## Asynchronous messages with JS 2
 
 [Index](#Index)
 
+messenger/views.py
 
+`from django.shortcuts import get_object_or_404`
+
+```
+# Que debemos devolver en una peticion asincrona? pues lo que queramos texto plano, un snipet html para inyectarlo directamente en la pagina o una estructura bien organizada en formato xml o json que podemos analizar para actuar en concecuencia. RECOMENDABLE USAR JSON
+def add_message(request, pk): # import JsonResponse
+    # print(request.GET) # Nos mostrara todos los paremtros que se envian por GET
+    json_response = {'created':False} # Cuando añadamos un mensaje devolveremos una respuesta que es este json_response, si el mensaje se crea correctamente se cambiara False a True
+    if request.user.is_authenticated:
+        content = request.GET.get('content', None)
+        if content:
+            thread = get_object_or_404(Thread, pk=pk)
+            message = Message.objects.create(user=request.user, content=content)
+            thread.messages.add(message)
+            json_response['created'] = True
+    else:
+        raise Http404("User is not authenticated")
+  
+    return JsonResponse(json_response) # Y el automaticamente hace la convercion de un diccionario a un objeto json
+
+```
+
+messenger/templates/messenger/thread_detail.html
+
+```
+<!-- Aquí crearemos el formulario -->
+            <textarea id="content" class="form-control mb-2" placeholder="Escribre tu mensaje aquí" rows="2"></textarea>
+            <button id="send" class="btn btn-primary btn-sm btn-block" disabled>Enviar Mensaje</button>
+            <script>
+              var send = document.getElementById("send");
+              send.addEventListener("click", function(){
+                var content = encodeURIComponent(document.getElementById("content").value); // &  Configurar codificacion y evitar ? o &(significa que queremos añadir otro variable)
+                if (content.length > 0){
+                  document.getElementById("content").value = '';
+                  send.disabled = true;
+                  const url = "{% url 'messenger:add' thread.pk %}" + "?content="+content // Concatenamos a la url el parametro get que se ha creado sumandole otra cadena con el ? y el = que es una variable tipo get y al final sumar el content de nuestra variable
+                  fetch(url, {'credentials':'include'}).then(response => response.json()).then(function(data){
+                  // alert(data.created);
+                  var message = document.createElement('div');
+                  message.classList.add('mine', 'mb-3');
+                  message.innerHTML = '<small><i>Hace unos segundos</i></small><br>'+decodeURIComponent(content);
+                  document.getElementById("thread").appendChild(message);
+                  ScrollBottomInThread();
+                })
+                }
+              }) 
+
+              // Evento que activa o desactiva el boton dependiendo de si hay o no mensaje
+              var content = document.getElementById("content");
+              content.addEventListener("keyup", function(){
+                if (!this.checkValidity() || !this.value){
+                  send.disabled = true;
+                } else {
+                  send.disabled = false;
+                }
+              })
+
+              // Forzar el scroll abajo de todo
+              function ScrollBottomInThread(){
+                var thread = document.getElementById("thread");
+                thread.scrollTop = thread.scrollHeight;
+              }
+
+              ScrollBottomInThread();
+            </script>
+```
+
+Ok...
 
 
 ## Asynchronous messages with JS 3
