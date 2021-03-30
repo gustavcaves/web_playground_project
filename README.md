@@ -39,6 +39,9 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    28. [TDD 2 Refactoring](#TDD-2-Refactoring)
    29. [TDD 3 Creating Model Manager](#TDD-3-Creating-Model-Manager)
    30. [Urls Views and Templates to Messenger](#Urls-Views-and-Templates-to-Messenger)
+   31. [Asynchronous messages with JS 1](#Asynchronous-messages-with-JS-1)
+   32. [Asynchronous messages with JS 2](#Asynchronous-messages-with-JS-2)
+   33. [Asynchronous messages with JS 3](#Asynchronous-messages-with-JS-3)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -95,8 +98,6 @@ Pillow==5.0.0
 django==2.0.2
 
 django-ckeditor==5.4.0
-
-
 
 # Documentation Web Playground
 
@@ -2136,6 +2137,59 @@ in core/templates/core/base.html
 ```
 
 And try in the navigator.
+
+## Asynchronous messages with JS 1
+
+[Index](#Index)
+
+## Asynchronous messages with JS 2
+
+[Index](#Index)
+
+messenger/views.py
+
+`from django.http import Http404, JsonResponse`
+
+```
+# Que debemos devolver en una peticion asincrona? pues lo que queramos texto plano, un snipet html para inyectarlo directamente en la pagina o una estructura bien organizada en formato xml o json que podemos analizar para actuar en concecuencia. RECOMENDABLE USAR JSON
+def add_message(request, pk): # import JsonResponse
+    print(request.GET) # Nos mostrara todos los paremtros que se envian por GET
+    json_response = {'created':False} # Cuando añadamos un mensaje devolveremos una respuesta que es este json_response, si el mensaje se crea correctamente se cambiara False a True
+    return JsonResponse(json_response) # Y el automaticamente hace la convercion de un diccionario a un objeto json
+
+```
+
+messenger/urls.py
+
+```
+    path('thread/<int:pk>/add/', add_message, name="add"),
+    # Que debemos devolver en una peticion asincrona? pues lo que queramos texto plano, un snipet html para inyectarlo directamente en la pagina o una estructura bien organizada en formato xml o json que podemos analizar para actuar en concecuencia. RECOMENDABLE USAR JSON
+
+```
+
+messenger/templates/messenger.py
+
+```
+            <!-- Aquí crearemos el formulario -->
+            <button id="testBtn">Peticion asincrona de prueba</button>
+            <script>
+              var testBtn = document.getElementById("testBtn");
+              testBtn.addEventListener("click", function(){
+                var content = "Esto es una prueba" // Se crea esta variable simulando un get content
+                const url = "{% url 'messenger:add' thread.pk %}" + "?content="+content // Concatenamos a la url el parametro get que se ha creado sumandole otra cadena con el ? y el = que es una variable tipo get y al final sumar el content de nuestra variable
+                fetch(url).then(response => response.json()).then(function(data){
+                  alert(data.created);
+                })
+              }) 
+            </script>
+```
+
+Ok...
+
+
+## Asynchronous messages with JS 3
+
+[Index](#Index)
 
 # Comments
 

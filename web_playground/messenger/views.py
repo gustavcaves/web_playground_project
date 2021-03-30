@@ -7,7 +7,7 @@ from django.views.generic import TemplateView
 
 from .models import Thread
 
-from django.http import Http404
+from django.http import Http404, JsonResponse
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -33,3 +33,9 @@ class ThreadDetail(DetailView):
         if self.request.user not in obj.users.all():
             raise Http404
         return obj
+
+# Que debemos devolver en una peticion asincrona? pues lo que queramos texto plano, un snipet html para inyectarlo directamente en la pagina o una estructura bien organizada en formato xml o json que podemos analizar para actuar en concecuencia. RECOMENDABLE USAR JSON
+def add_message(request, pk): # import JsonResponse
+    print(request.GET) # Nos mostrara todos los paremtros que se envian por GET
+    json_response = {'created':False} # Cuando añadamos un mensaje devolveremos una respuesta que es este json_response, si el mensaje se crea correctamente se cambiara False a True
+    return JsonResponse(json_response) # Y el automaticamente hace la convercion de un diccionario a un objeto json

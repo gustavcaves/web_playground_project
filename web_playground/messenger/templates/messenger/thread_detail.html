@@ -59,6 +59,17 @@
               {% endfor %}
             </div>
             <!-- Aquí crearemos el formulario -->
+            <button id="testBtn">Peticion asincrona de prueba</button>
+            <script>
+              var testBtn = document.getElementById("testBtn");
+              testBtn.addEventListener("click", function(){
+                var content = "Esto es una prueba" // Se crea esta variable simulando un get content
+                const url = "{% url 'messenger:add' thread.pk %}" + "?content="+content // Concatenamos a la url el parametro get que se ha creado sumandole otra cadena con el ? y el = que es una variable tipo get y al final sumar el content de nuestra variable
+                fetch(url).then(response => response.json()).then(function(data){
+                  alert(data.created);
+                })
+              }) 
+            </script>
           </div>
         </div>
     </div>
