@@ -2142,9 +2142,6 @@ And try in the navigator.
 
 [Index](#Index)
 
-## Asynchronous messages with JS 2
-
-[Index](#Index)
 
 messenger/views.py
 
@@ -2185,6 +2182,13 @@ messenger/templates/messenger.py
 ```
 
 Ok...
+
+
+## Asynchronous messages with JS 2
+
+[Index](#Index)
+
+
 
 
 ## Asynchronous messages with JS 3
