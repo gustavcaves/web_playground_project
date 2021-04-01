@@ -42,6 +42,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    31. [Asynchronous messages with JS 1](#Asynchronous-messages-with-JS-1)
    32. [Asynchronous messages with JS 2](#Asynchronous-messages-with-JS-2)
    33. [Asynchronous messages with JS 3](#Asynchronous-messages-with-JS-3)
+   34. [Starting Conversations](#Starting-Conversations)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -2260,6 +2261,153 @@ Ok...
 ## Asynchronous messages with JS 3
 
 [Index](#Index)
+
+## Starting Conversations
+
+[Index](#Index)
+
+profiles/templates/profiles/profile_detail.html
+
+```
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}{{profile.user}}{% endblock %}
+{% block content %}
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+          <div class="row">
+            <!-- Avatar -->
+            <div class="col-md-2">
+              {% if profile.avatar %}
+                <img src="{{profile.avatar.url}}" class="img-fluid">
+              {% else %}
+                <img src="{% static 'registration/img/no-avatar.jpg' %}" class="img-fluid">
+              {% endif %}
+              {% if request.user != profile.user %}
+              <a href="{% url 'messenger:start' profile.user.username %}" class="btn btn-primary btn-sm btn-block mt-3">
+              Enviar Mensaje
+              </a>
+              {% endif %}
+            </div>
+            <!-- Campos -->
+            <div class="col-md-10">
+              <h3>{{profile.user}}</h3>
+              {% if profile.bio %}<p>{{profile.bio}}</p>{% endif %}
+              {% if profile.link %}<p><a href="{{profile.link}}" target="_blank">{{profile.link}}</a></p>{% endif %}
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+```
+
+messenger/views.py
+
+```
+from django.shortcuts import get_object_or_404, redirect
+
+from django.contrib.auth.models import User
+from django.urls import reverse_lazy
+```
+
+```
+# Que debemos devolver en una peticion asincrona? pues lo que queramos texto plano, un snipet html para inyectarlo directamente en la pagina o una estructura bien organizada en formato xml o json que podemos analizar para actuar en concecuencia. RECOMENDABLE USAR JSON
+def add_message(request, pk): # import JsonResponse
+    # print(request.GET) # Nos mostrara todos los paremtros que se envian por GET
+    json_response = {'created':False} # Cuando añadamos un mensaje devolveremos una respuesta que es este json_response, si el mensaje se crea correctamente se cambiara False a True
+    if request.user.is_authenticated:
+        content = request.GET.get('content', None)
+        if content:
+            thread = get_object_or_404(Thread, pk=pk)
+            message = Message.objects.create(user=request.user, content=content)
+            thread.messages.add(message)
+            json_response['created'] = True
+            if len(thread.messages.all()) is 1:
+                json_response['first'] = True
+    else:
+        raise Http404("User is not authenticated")
+  
+    return JsonResponse(json_response) # Y el automaticamente hace la convercion de un diccionario a un objeto json
+
+@login_required
+def start_thread(request, username):
+    user = get_object_or_404(User, username=username)
+    thread = Thread.objects.find_or_create(user, request.user)
+    return redirect(reverse_lazy('messenger:detail', args=[thread.pk]))
+```
+
+messenger/urls.py
+
+```
+from django.urls import path
+from .views import ThreadList, ThreadDetail, add_message, start_thread
+
+messenger_patterns = ([
+    path('', ThreadList.as_view(), name="list"),
+    path('thread/<int:pk>/', ThreadDetail.as_view(), name="detail"),
+    path('thread/<int:pk>/add/', add_message, name="add"),
+    # Que debemos devolver en una peticion asincrona? pues lo que queramos texto plano, un snipet html para inyectarlo directamente en la pagina o una estructura bien organizada en formato xml o json que podemos analizar para actuar en concecuencia. RECOMENDABLE USAR JSON
+    path('thread/start/<username>/', start_thread, name="start"),
+], "messenger")
+```
+
+thread_detail.html
+
+```
+            <script>
+              var send = document.getElementById("send");
+              send.addEventListener("click", function(){
+                var content = encodeURIComponent(document.getElementById("content").value); // &  Configurar codificacion y evitar ? o &(significa que queremos añadir otro variable)
+                if (content.length > 0){
+                  document.getElementById("content").value = '';
+                  send.disabled = true;
+                  const url = "{% url 'messenger:add' thread.pk %}" + "?content="+content // Concatenamos a la url el parametro get que se ha creado sumandole otra cadena con el ? y el = que es una variable tipo get y al final sumar el content de nuestra variable
+                  fetch(url, {'credentials':'include'}).then(response => response.json()).then(function(data){
+                  // alert(data.created);
+                  var message = document.createElement('div');
+                  message.classList.add('mine', 'mb-3');
+                  message.innerHTML = '<small><i>Hace unos segundos</i></small><br>'+decodeURIComponent(content);
+                  document.getElementById("thread").appendChild(message);
+                  ScrollBottomInThread();
+                    // Si es el primer mensaje actualizaremos para que aparezca a la izquierda
+                   if (data.first) {
+                     window.location.href = "{% url 'messenger:detail' thread.pk %}";
+                   }
+                })
+                }
+              }) 
+
+              // Evento que activa o desactiva el boton dependiendo de si hay o no mensaje
+              var content = document.getElementById("content");
+              content.addEventListener("keyup", function(){
+                if (!this.checkValidity() || !this.value){
+                  send.disabled = true;
+                } else {
+                  send.disabled = false;
+                }
+              })
+
+              // Forzar el scroll abajo de todo
+              function ScrollBottomInThread(){
+                var thread = document.getElementById("thread");
+                thread.scrollTop = thread.scrollHeight;
+              }
+
+              ScrollBottomInThread();
+            </script>
+```
+
+This ok...
+
+
+
+
 
 # Comments
 
