@@ -2431,6 +2431,9 @@ class Thread(models.Model):
 
 It Ok...
 
+Hector Profe:
+
+Con esto estimados alumnos acabamos el proyecto, yo espero que hayais aprendido muchisimo y podais aplicar muchas de estas funcionalidades en vuestros futuros proyectos , estoy convensidisimo de que con todo lo que os he explicado podeis hacer un monton de proyectos personales y experimentar un monton de cosas que os sirvan como base para vosotros mismos ir dando los siguientes pasos y desarrollar practicamente cualquier cosa que querais , sin mas que decir nos vemos en la siguiente seccion.
 
 
 # Comments
