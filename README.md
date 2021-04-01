@@ -43,6 +43,7 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    32. [Asynchronous messages with JS 2](#Asynchronous-messages-with-JS-2)
    33. [Asynchronous messages with JS 3](#Asynchronous-messages-with-JS-3)
    34. [Starting Conversations](#Starting-Conversations)
+   35. [End detail](#End-detail)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -2257,7 +2258,6 @@ messenger/templates/messenger/thread_detail.html
 
 Ok...
 
-
 ## Asynchronous messages with JS 3
 
 [Index](#Index)
@@ -2406,6 +2406,30 @@ thread_detail.html
 This ok...
 
 
+## End detail
+
+[Index](#Index)
+
+messenger/models.py 
+
+```
+    # Forzar la actualización haciendo save
+    instance.save()
+```
+
+```
+class Thread(models.Model):
+    users = models.ManyToManyField(User, related_name='threads')
+    messages = models.ManyToManyField(Message)
+    updated = models.DateTimeField(auto_now=True)
+
+    objects = ThreadManager()
+
+    class Meta:
+        ordering = ['-updated']
+```
+
+It Ok...
 
 
 
