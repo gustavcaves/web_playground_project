@@ -44,6 +44,8 @@ In this repositoy I will be getting the documentation of the proyect web playgor
    33. [Asynchronous messages with JS 3](#Asynchronous-messages-with-JS-3)
    34. [Starting Conversations](#Starting-Conversations)
    35. [End detail](#End-detail)
+   36. [Name Administrator](#Name-Administrator)
+   37. [PythonAnywhere DevOps](#PythonAnywhere-DevOps)
 6. [Comments](#Comments)
 
 # How to upload this repository
@@ -2405,12 +2407,11 @@ thread_detail.html
 
 This ok...
 
-
 ## End detail
 
 [Index](#Index)
 
-messenger/models.py 
+messenger/models.py
 
 ```
     # Forzar la actualización haciendo save
@@ -2434,6 +2435,78 @@ It Ok...
 Hector Profe:
 
 Con esto estimados alumnos acabamos el proyecto, yo espero que hayais aprendido muchisimo y podais aplicar muchas de estas funcionalidades en vuestros futuros proyectos , estoy convensidisimo de que con todo lo que os he explicado podeis hacer un monton de proyectos personales y experimentar un monton de cosas que os sirvan como base para vosotros mismos ir dando los siguientes pasos y desarrollar practicamente cualquier cosa que querais , sin mas que decir nos vemos en la siguiente seccion.
+
+## Name Administrator
+
+In urls.py general
+
+```
+# Custom titles for admin
+admin.site.site_header = "Gustav´s Web PlayGround"
+admin.site.index_title = "Panel de administrador"
+admin.site.site_title = "Gustav´s"
+```
+
+settings.py
+
+```
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates/')], # Search templates in this directory too
+```
+
+Miniconda/envs/"entorno con el cual trabajo"/lib/site-packages/django/contrib/admin/templates/admin
+
+base_site.html copy to templates/admin in our locale project
+
+```
+{% extends "admin/base.html" %}
+
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+<style>
+    #header { background: #4c2d1b; }
+</style>
+{% endblock extrastyle %}
+
+{% block branding %}
+{% comment %} <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1> {% endcomment %}
+
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'Screenshot_350.png' %}" height="40px">
+    </a>
+</h1>
+
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+```
+
+settings.py general
+
+```
+STATIC_URL = '/static/'
+# POR CIERTO NO OLVIDEIS QUE PARA SERVIR FICHEROS ESTATICOS DURANTE EL DESARROLLO HAY QUE CONFIGURAR EL FICHERO URLS.PY DEL PROYECTO
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+```
+
+Create a folder templates/admin in local general of our project and static too to server static files.
+
+All is Ok.. Next... Load for produccion in pythonanywhere
+
+
+## PythonAnywhere DevOps
+
+[Index](#Index)
+
+
+
 
 
 # Comments

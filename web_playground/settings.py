@@ -60,7 +60,7 @@ ROOT_URLCONF = 'web_playground.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/')], # Search templates in this directory too
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,6 +128,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+# POR CIERTO NO OLVIDEIS QUE PARA SERVIR FICHEROS ESTATICOS DURANTE EL DESARROLLO HAY QUE CONFIGURAR EL FICHERO URLS.PY DEL PROYECTO
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Auth redirect
 # LOGIN_REDIRECT_URL = 'pages:pages'
